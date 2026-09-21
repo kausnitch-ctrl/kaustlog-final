@@ -1812,3 +1812,93 @@ button { cursor: pointer; }
     opacity: 0;
   }
 }
+/* =========================
+   連続モード設定
+========================= */
+
+.continuous-settings {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #edf0ee;
+}
+
+.continuous-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: #56605a;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.continuous-toggle input {
+  width: 17px;
+  height: 17px;
+  accent-color: #4d8b68;
+}
+
+.auto-next-setting {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #7a827d;
+  font-size: 11px;
+}
+
+.auto-next-setting select {
+  border: 1px solid #dfe5e1;
+  border-radius: 8px;
+  padding: 7px 10px;
+  background: white;
+  color: #4e5751;
+  font-size: 12px;
+}
+
+
+/* =========================
+   結果画面ボタン
+========================= */
+
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: min(280px, 100%);
+  margin: 25px auto 0;
+}
+
+.result-next-button,
+.result-back-button {
+  border: 0;
+  border-radius: 11px;
+  padding: 13px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.result-next-button {
+  background: #4d8b68;
+  color: white;
+  box-shadow: 0 5px 15px rgba(77, 139, 104, .2);
+}
+
+.result-back-button {
+  background: #f0f3f1;
+  color: #65706a;
+}
+
+.result-next-button:active,
+.result-back-button:active {
+  transform: scale(.98);
+}
+
+
+/* 一冊完走時の戻るボタン */
+
+.book-complete .result-back-button {
+  margin-top: 25px;
+}
