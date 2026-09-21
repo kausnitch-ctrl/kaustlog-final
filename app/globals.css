@@ -1160,3 +1160,655 @@ button {
 button { cursor: pointer; }
 
 .calendar-empty { background: transparent; }
+/* ---------- result celebration ---------- */
+
+.result-screen {
+  position: relative;
+  overflow: hidden;
+  min-height: 330px;
+}
+
+.result-celebration {
+  text-align: center;
+  animation: resultPop 0.45s ease-out;
+}
+
+.result-icon {
+  width: 82px;
+  height: 82px;
+  margin: 8px auto 12px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 42px;
+  font-weight: 800;
+  animation: resultIconPop 0.55s cubic-bezier(.2,1.4,.4,1);
+}
+
+.result-stars {
+  font-size: 18px;
+  letter-spacing: 7px;
+  margin-bottom: 5px;
+  animation: starFloat 1s ease-out;
+}
+
+.result-screen h2 {
+  margin: 5px 0;
+  font-size: 27px;
+  font-weight: 800;
+}
+
+.result-message {
+  margin: 8px 0 20px;
+  color: #777;
+  font-size: 13px;
+}
+
+.result-time {
+  width: 150px;
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.8);
+}
+
+.result-time span {
+  display: block;
+  color: #888;
+  font-size: 10px;
+  margin-bottom: 3px;
+}
+
+.result-time strong {
+  font-size: 25px;
+  letter-spacing: 1px;
+}
+
+.result-attempt {
+  color: #888;
+  font-size: 11px;
+  margin: 10px 0;
+}
+
+.next-problem-message {
+  margin-top: 18px;
+  font-size: 12px;
+  color: #6b9c7e;
+  animation: nextPulse 1.2s infinite;
+}
+
+/* correct */
+
+.result-screen.correct {
+  background: linear-gradient(
+    180deg,
+    #f1fbf4 0%,
+    #ffffff 100%
+  );
+}
+
+.result-screen.correct .result-icon {
+  background: #dff3e5;
+  color: #3f9660;
+  box-shadow: 0 8px 25px rgba(63,150,96,.18);
+}
+
+.result-screen.correct .result-stars {
+  color: #e1b83f;
+}
+
+.result-screen.correct h2 {
+  color: #398858;
+}
+
+/* partial */
+
+.result-screen.partial {
+  background: linear-gradient(
+    180deg,
+    #fffaf0 0%,
+    #ffffff 100%
+  );
+}
+
+.result-screen.partial .result-icon {
+  background: #fff0c9;
+  color: #c49327;
+  box-shadow: 0 8px 25px rgba(196,147,39,.16);
+}
+
+.result-screen.partial .result-stars {
+  color: #d8ae3c;
+}
+
+.result-screen.partial h2 {
+  color: #b88924;
+}
+
+/* wrong */
+
+.result-screen.wrong {
+  background: linear-gradient(
+    180deg,
+    #fff4f4 0%,
+    #ffffff 100%
+  );
+}
+
+.result-screen.wrong .result-icon {
+  background: #ffe1e1;
+  color: #d05252;
+  box-shadow: 0 8px 25px rgba(208,82,82,.15);
+}
+
+.result-screen.wrong .result-stars {
+  color: #d05252;
+}
+
+.result-screen.wrong h2 {
+  color: #c64c4c;
+}
+
+/* animations */
+
+@keyframes resultPop {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes resultIconPop {
+  0% {
+    transform: scale(.4) rotate(-12deg);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.12) rotate(3deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+@keyframes starFloat {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nextPulse {
+  0%, 100% {
+    opacity: .45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+/* ---------- growth chart ---------- */
+
+.growth-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  margin-bottom: 22px;
+}
+
+.growth-stats > div {
+  background: #f6f8f6;
+  border-radius: 12px;
+  padding: 11px 7px;
+  text-align: center;
+}
+
+.growth-stats span {
+  display: block;
+  color: #818a85;
+  font-size: 9px;
+  margin-bottom: 5px;
+}
+
+.growth-stats strong {
+  display: block;
+  color: #3f7554;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.growth-stats small {
+  font-size: 9px;
+  font-weight: 500;
+  margin-left: 2px;
+}
+
+.growth-chart {
+  height: 150px;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  padding: 10px 3px 0;
+  border-bottom: 1px solid #e5e9e6;
+  overflow: hidden;
+}
+
+.growth-column {
+  flex: 1;
+  height: 100%;
+  min-width: 2px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.growth-bar {
+  width: 100%;
+  min-height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(
+    180deg,
+    #78b38d,
+    #4d8b68
+  );
+}
+
+.growth-chart-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 7px;
+  color: #8a928d;
+  font-size: 9px;
+}
+/* =========================
+   問題結果演出
+========================= */
+
+.result-screen {
+  position: relative;
+  min-height: calc(100vh - 120px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 18px;
+  text-align: center;
+}
+
+.result-content {
+  position: relative;
+  z-index: 5;
+  animation: resultAppear 0.45s ease-out;
+}
+
+.result-screen h2 {
+  margin: 12px 0 8px;
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.result-screen p {
+  margin: 5px 0;
+}
+
+.result-small-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 27px;
+  font-weight: 800;
+  animation: resultPop 0.45s cubic-bezier(.2, 1.5, .4, 1);
+}
+
+.result-correct {
+  background: #f2faf4;
+}
+
+.result-correct .result-small-icon {
+  background: #4d8b68;
+  color: white;
+}
+
+.result-correct h2 {
+  color: #4d8b68;
+}
+
+.result-partial {
+  background: #fffaf0;
+}
+
+.result-partial .result-small-icon {
+  background: #d5a72d;
+  color: white;
+}
+
+.result-partial h2 {
+  color: #bd8b1f;
+}
+
+.result-wrong {
+  background: #fff6f6;
+}
+
+.result-wrong .result-small-icon {
+  background: #cf5a5a;
+  color: white;
+}
+
+.result-wrong h2 {
+  color: #c94d4d;
+}
+
+.result-time {
+  display: block;
+  margin-top: 18px;
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+}
+
+.next-problem-message {
+  margin-top: 28px !important;
+  color: #8b938e;
+  font-size: 12px;
+  animation: nextMessage 1.2s ease-in-out infinite;
+}
+
+
+/* =========================
+   章クリア
+========================= */
+
+.chapter-complete {
+  background:
+    radial-gradient(circle at 50% 40%, #f3faf5 0%, #ffffff 48%);
+}
+
+.result-kicker {
+  color: #6b9c7e;
+  font-size: 12px !important;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+.result-chapter-icon {
+  width: 92px;
+  height: 92px;
+  margin: 14px auto;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #4d8b68;
+  color: white;
+  font-size: 48px;
+  font-weight: 800;
+  box-shadow: 0 12px 35px rgba(77, 139, 104, .25);
+  animation: chapterPop .65s cubic-bezier(.15, 1.5, .35, 1);
+}
+
+.chapter-complete h2 {
+  color: #397553;
+}
+
+.result-book-name {
+  color: #707973;
+  font-size: 14px;
+}
+
+.chapter-clear-message {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.chapter-clear-message strong {
+  font-size: 16px;
+}
+
+.chapter-clear-message span {
+  color: #7c857f;
+  font-size: 12px;
+}
+
+.result-stars {
+  margin-top: 20px;
+  color: #d5a72d;
+  font-size: 22px;
+  letter-spacing: 8px;
+  animation: starsAppear .8s ease-out .2s both;
+}
+
+.chapter-sparkle {
+  position: absolute;
+  color: #d5a72d;
+  font-size: 25px;
+  animation: sparkleFloat 1.8s ease-in-out infinite;
+}
+
+.sparkle-a {
+  top: 25%;
+  left: 20%;
+}
+
+.sparkle-b {
+  top: 32%;
+  right: 20%;
+  animation-delay: .25s;
+}
+
+.sparkle-c {
+  bottom: 25%;
+  left: 28%;
+  animation-delay: .5s;
+}
+
+
+/* =========================
+   一冊完走
+========================= */
+
+.book-complete {
+  background:
+    radial-gradient(circle at 50% 45%, #fff7d9 0%, #fffdf5 28%, #ffffff 65%);
+}
+
+.book-complete .result-kicker {
+  color: #b18418;
+  letter-spacing: 4px;
+}
+
+.result-big-icon {
+  margin: 12px auto;
+  font-size: 72px;
+  animation: trophyAppear .8s cubic-bezier(.15, 1.5, .35, 1);
+}
+
+.book-complete h2 {
+  margin-top: 4px;
+  color: #9b7412;
+  font-size: 36px;
+}
+
+.book-complete .result-book-name {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.book-complete-message {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.book-complete-message strong {
+  font-size: 18px;
+}
+
+.book-complete-message span {
+  color: #7d827d;
+  font-size: 12px;
+}
+
+.book-complete .result-stars {
+  color: #c79620;
+  font-size: 28px;
+  letter-spacing: 12px;
+}
+
+
+/* 紙吹雪 */
+
+.confetti {
+  position: absolute;
+  z-index: 2;
+  font-size: 28px;
+  animation: confettiFall 2.8s ease-out infinite;
+}
+
+.confetti-a {
+  top: 15%;
+  left: 15%;
+}
+
+.confetti-b {
+  top: 20%;
+  right: 15%;
+  animation-delay: .35s;
+}
+
+.confetti-c {
+  top: 55%;
+  left: 8%;
+  animation-delay: .7s;
+}
+
+.confetti-d {
+  top: 52%;
+  right: 8%;
+  animation-delay: 1s;
+}
+
+
+/* =========================
+   アニメーション
+========================= */
+
+@keyframes resultAppear {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes resultPop {
+  0% {
+    transform: scale(.5);
+    opacity: 0;
+  }
+
+  70% {
+    transform: scale(1.12);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes nextMessage {
+  0%, 100% {
+    opacity: .45;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes chapterPop {
+  0% {
+    transform: scale(.4) rotate(-12deg);
+    opacity: 0;
+  }
+
+  70% {
+    transform: scale(1.12) rotate(3deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+@keyframes starsAppear {
+  from {
+    opacity: 0;
+    transform: scale(.6);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes sparkleFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: .5;
+  }
+
+  50% {
+    transform: translateY(-12px) rotate(20deg);
+    opacity: 1;
+  }
+}
+
+@keyframes trophyAppear {
+  0% {
+    transform: scale(.3) rotate(-15deg);
+    opacity: 0;
+  }
+
+  65% {
+    transform: scale(1.2) rotate(5deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-20px) rotate(0deg) scale(.5);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(180px) rotate(180deg) scale(1);
+    opacity: 0;
+  }
+}

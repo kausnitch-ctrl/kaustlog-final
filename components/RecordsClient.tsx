@@ -34,7 +34,80 @@ export default function RecordsClient({ books }: { books: BookMeta[] }) {
 
   const totalCount = filtered.length;
   const totalStudySeconds = filtered.reduce((sum, item) => sum + Number(item.duration_seconds ?? 0), 0);
-  const correctCount = filtered.filter((item) => item.result === "correct").length;
+  const firstStudyDate = useMemo(() => {
+  if (filtered.length === 0) return null;
+
+  return dateKeyFromTimestamp(
+    filtered[0].attempted_at
+  );
+}, [filtered]);
+
+const progressHistory = useMemo(() => {
+  if (!firstStudyDate) return [];
+
+  const start = new Date(`${firstStudyDate}T00:00:00+09:00`);
+  const today = new Date();
+
+  const result: Array<{
+    date: string;
+    cumulativeCount: number;
+    cumulativeSeconds: number;
+    daysSinceStart: number;
+  }> = [];
+
+  const cumulativeByDate = new Map<
+    string,
+    { count: number; seconds: number }
+  >();
+
+  for (const attempt of filtered) {
+    const date = dateKeyFromTimestamp(attempt.attempted_at);
+
+    const current = cumulativeByDate.get(date) ?? {
+      count: 0,
+      seconds: 0,
+    };
+
+    current.count += 1;
+    current.seconds += Number(attempt.duration_seconds ?? 0);
+
+    cumulativeByDate.set(date, current);
+  }
+
+  let cumulativeCount = 0;
+  let cumulativeSeconds = 0;
+
+  const current = new Date(start);
+
+  while (current <= today) {
+    const date = current.toISOString().slice(0, 10);
+
+    const day = cumulativeByDate.get(date);
+
+    if (day) {
+      cumulativeCount += day.count;
+      cumulativeSeconds += day.seconds;
+    }
+
+    const daysSinceStart =
+      Math.floor(
+        (current.getTime() - start.getTime()) /
+          (1000 * 60 * 60 * 24)
+      ) + 1;
+
+    result.push({
+      date,
+      cumulativeCount,
+      cumulativeSeconds,
+      daysSinceStart,
+    });
+
+    current.setDate(current.getDate() + 1);
+  }
+
+  return result;
+}, [filtered, firstStudyDate]);
+const correctCount = filtered.filter((item) => item.result === "correct").length;
   const partialCount = filtered.filter((item) => item.result === "partial").length;
   const wrongCount = filtered.filter((item) => item.result === "wrong").length;
 
@@ -77,7 +150,78 @@ export default function RecordsClient({ books }: { books: BookMeta[] }) {
         <section className="record-card"><div className="card-title"><h2>直近7日間</h2><span>問題数</span></div><div className="record-chart">{last7.map((item) => <div className="record-chart-column" key={item.date}><span>{item.count}</span><div className="record-chart-bar-area"><div className="record-chart-bar" style={{ height: `${(item.count / maxCount) * 100}%` }} /></div><small>{new Date(`${item.date}T00:00:00+09:00`).toLocaleDateString("ja-JP", { month: "numeric", day: "numeric" })}</small></div>)}</div></section>
         <section className="record-card"><div className="card-title"><h2>学習カレンダー</h2><span>問題数</span></div><div className="calendar">{["月","火","水","木","金","土","日"].map((day) => <div className="calendar-day-name" key={day}>{day}</div>)}{calendarCells.map((date, index) => date ? (() => { const count = daily.get(date)?.count ?? 0; const level = count === 0 ? 0 : count <= 2 ? 1 : count <= 5 ? 2 : 3; return <div key={date} className={`calendar-cell level-${level}`} title={`${formatDate(date)}：${count}問`}>{new Date(`${date}T00:00:00+09:00`).getDate()}</div>; })() : <div key={`empty-${index}`} className="calendar-cell calendar-empty" />)}</div><div className="calendar-legend"><span><i className="level-0" />0</span><span><i className="level-1" />1–2</span><span><i className="level-2" />3–5</span><span><i className="level-3" />6+</span></div></section>
         <section className="record-card"><div className="card-title"><h2>日別記録</h2></div><div className="daily-record-list">{Array.from(daily.values()).reverse().map((item) => <div className="daily-record-item" key={item.date}><span>{formatDate(item.date)}</span><strong>{item.count}問　{Math.floor(item.seconds / 60)}分</strong></div>)}{daily.size === 0 && <p>まだ学習記録がありません。</p>}</div></section>
-      </>}
+        <section className="record-card">
+  <div className="card-title">
+    <h2>これまでの成長</h2>
+    <span>累計</span>
+  </div>
+
+  {progressHistory.length === 0 ? (
+    <p>学習記録がまだありません。</p>
+  ) : (
+    <>
+      <div className="growth-stats">
+        <div>
+          <span>累計学習時間</span>
+          <strong>
+            {Math.floor(totalStudySeconds / 3600)}
+            <small>時間</small>
+            {Math.floor((totalStudySeconds % 3600) / 60)}
+            <small>分</small>
+          </strong>
+        </div>
+
+        <div>
+          <span>累計挑戦</span>
+          <strong>
+            {totalCount}
+            <small>問</small>
+          </strong>
+        </div>
+
+        <div>
+          <span>学習開始から</span>
+          <strong>
+            {progressHistory[progressHistory.length - 1].daysSinceStart}
+            <small>日</small>
+          </strong>
+        </div>
+      </div>
+
+      <div className="growth-chart">
+        {progressHistory.map((item) => {
+          const max =
+            progressHistory[progressHistory.length - 1]
+              .cumulativeCount || 1;
+
+          return (
+            <div
+              key={item.date}
+              className="growth-column"
+              title={`${formatDate(item.date)}：累計${item.cumulativeCount}問`}
+            >
+              <div
+                className="growth-bar"
+                style={{
+                  height: `${Math.max(
+                    4,
+                    (item.cumulativeCount / max) * 100
+                  )}%`,
+                }}
+              />
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="growth-chart-labels">
+        <span>{formatDate(progressHistory[0].date)}</span>
+        <span>{formatDate(progressHistory[progressHistory.length - 1].date)}</span>
+      </div>
+    </>
+  )}
+</section>
+</>}
     </section>
     <nav className="bottom-nav"><Link href="/"><span>⌂</span><small>ホーム</small></Link><Link className="active" href="/records"><span>▦</span><small>学習記録</small></Link><Link href="/books"><span>▤</span><small>本</small></Link></nav>
   </main>;
